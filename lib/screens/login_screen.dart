@@ -31,7 +31,17 @@ class LoginScreen extends GetWidget<AuthController> {
                 onPressed: () {
                   Get.to(CreatAccountScreen());
                 },
-                child: const Text('Sign In'))
+                child: const Text('Sign In')),
+            TextButton(
+                onPressed: () {
+                  controller.loginWithGoogle();
+                },
+                child: const Text('sign in with google')),
+            TextButton(
+                onPressed: () {
+                  controller.loginWithGoogle();
+                },
+                child: const Text('sign in with facebook'))
           ]),
     );
   }

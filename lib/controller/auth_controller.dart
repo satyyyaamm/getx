@@ -2,10 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:getx_practice/screens/home_screen.dart';
 import 'package:getx_practice/screens/login_screen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Rxn<User> _firebaseUser = Rxn<User>();
+  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   // getter to get the user value
   get user => _firebaseUser.value?.email;
@@ -46,6 +48,34 @@ class AuthController extends GetxController {
         .catchError((error) {
       Get.snackbar('Error Logging In ', error.message);
     });
+  }
+
+// Login with google
+  Future loginWithGoogle() async {
+    try {
+      final googleSignInAccount = await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount!.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+      final authResult = await _auth.signInWithCredential(credential);
+      final User? user = authResult.user;
+      assert(!user!.isAnonymous);
+      assert(await user!.getIdToken() != null);
+      final User? currentUser = _auth.currentUser;
+      assert(user!.uid == currentUser!.uid);
+      Get.offAll(() => const HomeScreen()); // navigate to your wanted page
+      return;
+    } catch (error) {
+      Get.snackbar('Error while signing in with google', error.toString());
+    }
+  }
+
+// Login with facebook
+  Future loginWithFacebook() async {
+    
   }
 
   Future signout() async {

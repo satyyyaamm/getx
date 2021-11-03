@@ -2,6 +2,8 @@
 //
 //     final product = productFromJson(jsonString);
 
+// ignore_for_file: prefer_null_aware_operators, prefer_if_null_operators, constant_identifier_names, unnecessary_null_comparison, unnecessary_new, prefer_conditional_assignment
+
 import 'dart:convert';
 
 List<Product> productFromJson(String str) =>

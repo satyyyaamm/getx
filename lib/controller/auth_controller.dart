@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:getx_practice/screens/home_screen.dart';
@@ -74,9 +76,7 @@ class AuthController extends GetxController {
   }
 
 // Login with facebook
-  Future loginWithFacebook() async {
-    
-  }
+  Future loginWithFacebook() async {}
 
   Future signout() async {
     await _auth.signOut().then((value) => Get.offAll(() => LoginScreen()));

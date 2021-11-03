@@ -29,9 +29,9 @@ class HomeScreen extends GetWidget<AuthController> {
                 },
                 child: const Text("Fetch data")),
             Obx(
-              () => SizedBox(
-                height: MediaQuery.of(context).size.height / 2,
-                child: apicontroller.loading == true
+              () => Expanded(
+                // height: MediaQuery.of(context).size.height / 2,
+                child: apicontroller.loading == RxBool(true)
                     ? const Center(child: CircularProgressIndicator())
                     : ListView.builder(
                         shrinkWrap: true,

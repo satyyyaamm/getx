@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_practice/controller/api_controller.dart';
 import 'package:getx_practice/controller/auth_controller.dart';
 
 class HomeScreen extends GetWidget<AuthController> {
@@ -7,6 +8,7 @@ class HomeScreen extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
+    var apicontroller = Get.put(ApiController());
     return Scaffold(
       body: Center(
         child: Column(
@@ -21,6 +23,25 @@ class HomeScreen extends GetWidget<AuthController> {
               },
               child: const Text("Sign Out"),
             ),
+            TextButton(
+                onPressed: () {
+                  apicontroller.fetchdata();
+                },
+                child: const Text("Fetch data")),
+            Obx(
+              () => SizedBox(
+                height: MediaQuery.of(context).size.height / 2,
+                child: apicontroller.loading == true
+                    ? const Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: apicontroller.product.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Text("${apicontroller.product[index].name}");
+                        },
+                      ),
+              ),
+            )
           ],
         ),
       ),

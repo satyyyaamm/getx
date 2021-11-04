@@ -5,18 +5,22 @@ import 'package:getx_practice/controller/auth_controller.dart';
 
 class HomeScreen extends GetWidget<AuthController> {
   const HomeScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     var apicontroller = Get.put(ApiController());
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: ListView(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text("HOME SCREEN", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            Text("${controller.user}", style: const TextStyle(fontSize: 20)),
+            Container(
+              height: MediaQuery.of(context).size.height / 20,
+            ),
+            const Center(
+                child: Text("HOME SCREEN",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+            Center(child: Text("${controller.user}", style: const TextStyle(fontSize: 20))),
             TextButton(
               onPressed: () {
                 controller.signout();
@@ -29,8 +33,8 @@ class HomeScreen extends GetWidget<AuthController> {
                 },
                 child: const Text("Fetch data")),
             Obx(
-              () => Expanded(
-                // height: MediaQuery.of(context).size.height / 2,
+              () => SizedBox(
+                height: MediaQuery.of(context).size.height / 2.9,
                 child: apicontroller.loading == RxBool(true)
                     ? const Center(child: CircularProgressIndicator())
                     : ListView.builder(
@@ -41,6 +45,46 @@ class HomeScreen extends GetWidget<AuthController> {
                         },
                       ),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: TextField(
+                controller: apicontroller.namecontroller,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: TextField(
+                controller: apicontroller.jobtitlecontroller,
+              ),
+            ),
+            TextButton(
+                onPressed: () {
+                  apicontroller.postdata();
+                },
+                child: const Text("Post data")),
+            TextButton(
+                onPressed: () {
+                  apicontroller.putdata();
+                },
+                child: const Text("Put data")),
+            TextButton(
+                onPressed: () {
+                  apicontroller.deletedata();
+                },
+                child: const Text("delete data")),
+            Obx(
+              () => apicontroller.loading == RxBool(true)
+                  ? const Center(child: CircularProgressIndicator())
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(apicontroller.usermodel.value.id ?? 'loading...!'),
+                        Text(apicontroller.usermodel.value.name ?? 'loading...!'),
+                        Text(apicontroller.usermodel.value.job ?? 'loading...!')
+                      ],
+                    ),
             )
           ],
         ),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:getx_practice/controller/notification_controller.dart';
 import 'package:getx_practice/model/product_model.dart';
 import 'package:getx_practice/model/user_update_model.dart';
 import 'package:getx_practice/model/usermodel.dart';
@@ -43,6 +44,7 @@ class ApiController extends GetxController {
     var dataToGet = await ApiServices.postApi(apiUrl, dataToPost);
     if (dataToGet != null) {
       usermodel.value = userModelFromJson(dataToGet);
+      NotificationController.httpPostFCMNotification(namecontroller.text, jobtitlecontroller.text);
       loading(false);
     } else if (dataToGet == null) {
       Get.snackbar('Error', 'Error posting the data');
@@ -71,7 +73,7 @@ class ApiController extends GetxController {
   Future deletedata() async {
     String apiUrl = 'https://reqres.in/api/users/2';
     var dataToGet = await ApiServices.deleteApi(apiUrl);
-    print('delete data  ${dataToGet}');
+    print('delete data  $dataToGet');
     if (dataToGet != null) {
       print('in null');
       Get.snackbar('Successful', 'Successfully deleted your data as per request!');

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_practice/controller/api_controller.dart';
 import 'package:getx_practice/controller/auth_controller.dart';
+import 'package:getx_practice/controller/notification_controller.dart';
 
 class HomeScreen extends GetWidget<AuthController> {
   const HomeScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var apicontroller = Get.put(ApiController());
+    var notificationController = Get.put(NotificationController());
     return Scaffold(
       body: Center(
         child: ListView(
@@ -30,6 +32,7 @@ class HomeScreen extends GetWidget<AuthController> {
             TextButton(
                 onPressed: () {
                   apicontroller.fetchdata();
+                  notificationController.getToken();
                 },
                 child: const Text("Fetch data")),
             Obx(
@@ -49,12 +52,20 @@ class HomeScreen extends GetWidget<AuthController> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextField(
+                decoration: const InputDecoration(
+                  hintText: "name",
+                  border: OutlineInputBorder(),
+                ),
                 controller: apicontroller.namecontroller,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(20),
               child: TextField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "job title",
+                ),
                 controller: apicontroller.jobtitlecontroller,
               ),
             ),

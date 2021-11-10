@@ -7,7 +7,9 @@ class LocalNotifications {
 
   static void intialise() {
     // android specific settings and permissons
-    const _android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const _android = AndroidInitializationSettings(
+      '@mipmap/ic_launcher',
+    );
     // iOS specific settings and permissions
     const _iOS = IOSInitializationSettings(
       requestSoundPermission: false,
@@ -27,7 +29,6 @@ class LocalNotifications {
   static void displayNotification(RemoteMessage message) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-
       const android = AndroidNotificationDetails('satyyyaamm', 'satyyyaamm channel',
           importance: Importance.max, priority: Priority.high);
       const NotificationDetails notificationDetails = NotificationDetails(android: android);

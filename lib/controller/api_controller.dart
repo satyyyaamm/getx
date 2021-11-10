@@ -44,7 +44,10 @@ class ApiController extends GetxController {
     var dataToGet = await ApiServices.postApi(apiUrl, dataToPost);
     if (dataToGet != null) {
       usermodel.value = userModelFromJson(dataToGet);
-      NotificationController.httpPostFCMNotification(namecontroller.text, jobtitlecontroller.text);
+      NotificationController.httpPostFCMNotification(
+        namecontroller.text,
+        jobtitlecontroller.text,
+      );
       loading(false);
     } else if (dataToGet == null) {
       Get.snackbar('Error', 'Error posting the data');

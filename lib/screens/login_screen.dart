@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_practice/controller/auth_controller.dart';
 import 'package:getx_practice/screens/create_account_screen.dart';
+import 'package:getx_practice/screens/phone_autentication_screen.dart';
 
 class LoginScreen extends GetWidget<AuthController> {
   LoginScreen({Key? key}) : super(key: key);
@@ -39,9 +40,9 @@ class LoginScreen extends GetWidget<AuthController> {
                 child: const Text('sign in with google')),
             TextButton(
                 onPressed: () {
-                  controller.loginWithGoogle();
+                  Get.to(() => PhoneAuthenticationScreen());
                 },
-                child: const Text('sign in with facebook'))
+                child: const Text('sign in with Phone number'))
           ]),
     );
   }

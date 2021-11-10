@@ -70,32 +70,46 @@ class NotificationController extends GetxController {
     });
   }
 
+// this function is used to call request for notification via http post requests.
   static httpPostFCMNotification(
     String title,
     String body,
+    // String token,
   ) async {
-    final response = await ApiServices.client.post(
-      Uri.parse('https://fcm.googleapis.com/fcm/send'),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'key=$_webServerKey',
-      },
-      body: jsonEncode(<String, dynamic>{
-        "notification": {"body": body, "title": title, "sound": "default"},
-        "apns": {
-          "payload": {
-            "aps": {"sound": "default"}
-          }
+    if (title != '' && body != '') {
+      final response = await ApiServices.client.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=$_webServerKey',
         },
-        "priority": "high",
-        "data": {
-          "clickaction": "FLUTTERNOTIFICATIONCLICK",
-          "id": "1",
-          "status": "done",
-        },
-        "to": gettoken,
-      }),
-    );
-    print("response ------------------${response.statusCode}");
+        body: jsonEncode(<String, dynamic>{
+          "notification": {
+            "body": body,
+            "title": title,
+            "image":
+                'https://images.unsplash.com/photo-1542227844-5e56c7c2687d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=774&q=80',
+            "sound": "default",
+          },
+          "apns": {
+            "payload": {
+              "aps": {"sound": "default"}
+            }
+          },
+          "fcm_options": {
+            "image":
+                'https://images.unsplash.com/photo-1542227844-5e56c7c2687d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=774&q=80',
+          },
+          "priority": "high",
+          "data": {
+            "clickaction": "FLUTTERNOTIFICATIONCLICK",
+            "id": "1",
+            "status": "done",
+          },
+          "to": gettoken,
+        }),
+      );
+      print("response ------------------${response.statusCode}");
+    }
   }
 }

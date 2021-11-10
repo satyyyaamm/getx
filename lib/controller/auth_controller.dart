@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_practice/screens/home_screen.dart';
 import 'package:getx_practice/screens/login_screen.dart';
@@ -9,8 +10,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Rxn<User> _firebaseUser = Rxn<User>();
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final TextEditingController _codeController = TextEditingController();
   // getter to get the user value
   get user => _firebaseUser.value?.email;
 
@@ -55,7 +56,7 @@ class AuthController extends GetxController {
 // Login with google
   Future loginWithGoogle() async {
     try {
-      final googleSignInAccount = await googleSignIn.signIn();
+      final googleSignInAccount = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount!.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
@@ -78,6 +79,54 @@ class AuthController extends GetxController {
 // Login with facebook
   Future loginWithFacebook() async {}
 
+// Phone number authentication
+  Future phoneAuthentication(String phoneNumber, BuildContext context) async {
+    _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: const Duration(seconds: 60),
+      verificationCompleted: (AuthCredential credential) async {
+        UserCredential result = await _auth.signInWithCredential(credential);
+        _firebaseUser.value = result.user;
+        if (_firebaseUser.value != null) {
+          Get.offAll(() => const HomeScreen());
+        }
+      },
+      verificationFailed: (FirebaseAuthException exception) {
+        print(exception);
+      },
+      codeSent: (String verificationID, int? forceResendToken) {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                  title: const Text('Give us the code!'),
+                  content: Column(
+                    children: [
+                      TextField(
+                        controller: _codeController,
+                      ),
+                      TextButton(
+                          onPressed: () async {
+                            final code = _codeController.text.trim();
+                            PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                                verificationId: verificationID, smsCode: code);
+                            UserCredential result = await _auth.signInWithCredential(credential);
+                            _firebaseUser.value = result.user;
+                            if (_firebaseUser.value != null) {
+                              Get.offAll(() => const HomeScreen());
+                            }
+                          },
+                          child: const Text('Confrim'))
+                    ],
+                  ));
+            });
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
+// sign out
   Future signout() async {
     await _auth.signOut().then((value) => Get.offAll(() => LoginScreen()));
   }

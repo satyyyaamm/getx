@@ -11,15 +11,16 @@ class GoogleMapsScreen extends StatelessWidget {
     var mapController = Get.put(MapsController());
     return Scaffold(
       body: GoogleMap(
-        myLocationButtonEnabled: false,
-        zoomControlsEnabled: false,
-        initialCameraPosition: mapController.initalCameraPosition.value,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
+        zoomControlsEnabled: true,
+        initialCameraPosition: mapController.initalCameraPosition,
         onMapCreated: (controller) => mapController.googleMapController = controller,
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.location_disabled),
         onPressed: () {
-          mapController.animateToInitalLocation;
+          mapController.getUserLocation();
         },
       ),
     );

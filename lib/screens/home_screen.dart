@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_practice/controller/api_controller.dart';
 import 'package:getx_practice/controller/auth_controller.dart';
+import 'package:getx_practice/controller/maps_controller.dart';
 import 'package:getx_practice/controller/notification_controller.dart';
 import 'package:getx_practice/screens/google_maps.dart';
 
@@ -11,6 +12,7 @@ class HomeScreen extends GetWidget<AuthController> {
   Widget build(BuildContext context) {
     var apicontroller = Get.put(ApiController());
     var notificationController = Get.put(NotificationController());
+    var mapController = Get.put(MapsController());
     return Scaffold(
       body: Center(
         child: ListView(
@@ -22,11 +24,8 @@ class HomeScreen extends GetWidget<AuthController> {
             ),
             const Center(
                 child: Text("HOME SCREEN",
-                    style:
-                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
-            Center(
-                child: Text("${controller.user}",
-                    style: const TextStyle(fontSize: 20))),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold))),
+            Center(child: Text("${controller.user}", style: const TextStyle(fontSize: 20))),
             TextButton(
               onPressed: () {
                 controller.signout();
@@ -96,14 +95,14 @@ class HomeScreen extends GetWidget<AuthController> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(apicontroller.usermodel.value.id ?? 'loading...!'),
-                        Text(apicontroller.usermodel.value.name ??
-                            'loading...!'),
+                        Text(apicontroller.usermodel.value.name ?? 'loading...!'),
                         Text(apicontroller.usermodel.value.job ?? 'loading...!')
                       ],
                     ),
             ),
             TextButton(
               onPressed: () {
+                mapController.requestPermission();
                 Get.to(() => const GoogleMapsScreen());
               },
               child: const Text('Open Maps'),

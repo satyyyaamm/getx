@@ -5,6 +5,7 @@ import 'package:getx_practice/controller/auth_controller.dart';
 import 'package:getx_practice/controller/maps_controller.dart';
 import 'package:getx_practice/controller/notification_controller.dart';
 import 'package:getx_practice/screens/google_maps.dart';
+import 'package:getx_practice/services/local_notification.dart';
 
 class HomeScreen extends GetWidget<AuthController> {
   const HomeScreen({Key? key}) : super(key: key);
@@ -106,6 +107,13 @@ class HomeScreen extends GetWidget<AuthController> {
                 Get.to(() => const GoogleMapsScreen());
               },
               child: const Text('Open Maps'),
+            ),
+            TextButton(
+              onPressed: () {
+                // LocalNotifications.displayNotification(
+                //     'Apple Notification', 'See to see it working');
+              },
+              child: const Text('LOCAL NOTIFICATION'),
             ),
           ],
         ),

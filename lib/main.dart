@@ -11,8 +11,8 @@ import 'bindings/auth_binding.dart';
 // and you recieve and background notification
 Future<void> backgroundHandler(RemoteMessage message) async {
   print(message.data.toString());
-  print(message.notification!.title);
-  print(message.notification!.body);
+  print('message from backgroundHandler function ${message.notification!.title}');
+  print('message from backgroundHandler function ${message.notification!.body}');
 }
 
 void main() async {

@@ -31,7 +31,8 @@ class NotificationController extends GetxController {
     FirebaseMessaging.instance.getInitialMessage().then((message) {
       if (message != null) {
         messageFromNotification.value = message.data['extra'];
-        // print(messageFromNotification.value);
+        print("messagefrom get initial message function! **=> ${message.notification!.title}");
+        print("messagefrom get initial message funxtion! **=> ${message.notification!.body}");
         Get.to(() => const NotificationClickTestScren());
       }
     });
@@ -40,7 +41,7 @@ class NotificationController extends GetxController {
   getToken() async {
     FirebaseMessaging.instance.getToken().then((token) {
       gettoken = token;
-      print(token);
+      print('token $token');
     });
   }
 
@@ -49,8 +50,8 @@ class NotificationController extends GetxController {
   void onMessage() {
     FirebaseMessaging.onMessage.listen((message) {
       if (message.notification != null) {
-        print(message.notification!.title);
-        print(message.notification!.body);
+        print('onMessage function *=> ${message.notification!.title}');
+        print('onMessage function *=> ${message.notification!.body}');
         LocalNotifications.displayNotification(message);
       }
     });
@@ -61,6 +62,8 @@ class NotificationController extends GetxController {
 // background but opened
   void onMessageOpened() {
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print("message from get on Message Opened function! **=> ${message.notification!.title}");
+      print("message from get on Message Opened function! **=> ${message.notification!.body}");
       print(message.data['extra']);
       if (message.data['extra'] == 'login') {
         messageFromNotification.value = message.data['extra'];
@@ -76,40 +79,36 @@ class NotificationController extends GetxController {
     String body,
     // String token,
   ) async {
-    if (title != '' && body != '') {
-      final response = await ApiServices.client.post(
-        Uri.parse('https://fcm.googleapis.com/fcm/send'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': 'key=$_webServerKey',
+    print('title $title and body $body');
+    // if (title != '' && body != '') {
+    final response = await ApiServices.client.post(
+      Uri.parse('https://fcm.googleapis.com/fcm/send'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'key=$_webServerKey',
+      },
+      body: jsonEncode(<String, dynamic>{
+        "notification": {
+          "body": body,
+          "title": title,
+          "sound": "default",
         },
-        body: jsonEncode(<String, dynamic>{
-          "notification": {
-            "body": body,
-            "title": title,
-            "image":
-                'https://images.unsplash.com/photo-1542227844-5e56c7c2687d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=774&q=80',
-            "sound": "default",
-          },
-          "apns": {
-            "payload": {
-              "aps": {"sound": "default"}
-            }
-          },
-          "fcm_options": {
-            "image":
-                'https://images.unsplash.com/photo-1542227844-5e56c7c2687d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=774&q=80',
-          },
-          "priority": "high",
-          "data": {
-            "clickaction": "FLUTTERNOTIFICATIONCLICK",
-            "id": "1",
-            "status": "done",
-          },
-          "to": gettoken,
-        }),
-      );
-      print("response ------------------${response.statusCode}");
-    }
+        "apns": {
+          "payload": {
+            "aps": {"sound": "default"}
+          }
+        },
+        "priority": "high",
+        "data": {
+          "clickaction": "FLUTTERNOTIFICATIONCLICK",
+          "id": "1",
+          "status": "done",
+        },
+        "to": gettoken,
+      }),
+    );
+    print("response ------------------${response.statusCode}");
+    print('send to token $gettoken');
   }
+  // }
 }

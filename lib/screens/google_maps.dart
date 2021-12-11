@@ -20,7 +20,7 @@ class GoogleMapsScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.location_disabled),
         onPressed: () {
-          mapController.getUserLocation();
+          mapController.animateToInitalLocation();
         },
       ),
     );

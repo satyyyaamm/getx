@@ -52,6 +52,8 @@ class LocalNotifications {
     );
   }
 
+  // function that initializes the android and ios notification details
+  // and display notification
   static void displayNotification(RemoteMessage message) async {
     try {
       final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
@@ -68,6 +70,7 @@ class LocalNotifications {
       );
       const NotificationDetails notificationDetails =
           NotificationDetails(android: android, iOS: ios);
+      // displaying the notification
       _flutterLocalNotificationsPlugin.show(
         id,
         message.notification!.title,

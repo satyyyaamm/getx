@@ -97,7 +97,11 @@ class HomeScreen extends GetWidget<AuthController> {
                       children: [
                         Text(apicontroller.usermodel.value.id ?? 'loading...!'),
                         Text(apicontroller.usermodel.value.name ?? 'loading...!'),
-                        Text(apicontroller.usermodel.value.job ?? 'loading...!')
+                        Text(apicontroller.usermodel.value.job ?? 'loading...!'),
+                        // Text(
+                        //   mapController.address.toString(),
+                        //   style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                        // ),
                       ],
                     ),
             ),

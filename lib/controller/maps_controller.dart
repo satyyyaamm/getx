@@ -4,7 +4,6 @@ import 'package:location/location.dart';
 
 class MapsController extends GetxController {
   var initalCameraPosition = const CameraPosition(target: LatLng(20.5937, 78.9629), zoom: 11.5);
-
   Location location = Location();
   bool? _serviceEnabled;
   PermissionStatus? _permissionGranted;
@@ -37,14 +36,14 @@ class MapsController extends GetxController {
 
   getUserLocation() async {
     locationData = await location.getLocation();
-    print("latitude ${locationData!.latitude}");
-    print("longitude ${locationData!.longitude}");
-    // return locationData;
-  }
-
-  currentCameraLocation() {
-    googleMapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: LatLng(locationData!.latitude!, locationData!.longitude!), zoom: 11.5)));
+    initalCameraPosition = CameraPosition(
+        target: LatLng(locationData!.latitude!, locationData!.longitude!), zoom: 11.5);
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      print('current location ${currentLocation.latitude}');
+      print('current location ${currentLocation.longitude}');
+      currentLocation = locationData!;
+    });
+    update();
   }
 
   @override
@@ -54,7 +53,6 @@ class MapsController extends GetxController {
   }
 
   void animateToInitalLocation() {
-    getUserLocation();
     googleMapController.animateCamera(CameraUpdate.newCameraPosition(initalCameraPosition));
   }
 }
